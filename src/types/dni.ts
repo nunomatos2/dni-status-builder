@@ -25,20 +25,20 @@ export interface Session {
 }
 
 export const PILLARS: Pillar[] = [
-  { id: 'INOVAR',      emoji: '\u{1F52C}', label: 'Inovar' },
-  { id: 'TRANSFORMAR',  emoji: '\u2699\uFE0F', label: 'Transformar' },
-  { id: 'VENDER',       emoji: '\u{1F4B0}', label: 'Vender' },
-  { id: 'NUTRIR',       emoji: '\u{1F310}', label: 'Nutrir' },
-  { id: 'EQUIPA',       emoji: '\u{1F465}', label: 'Equipa' },
+  { id: 'INOVAR',      emoji: '🔬', label: 'Inovar' },
+  { id: 'TRANSFORMAR',  emoji: '⚙️', label: 'Transformar' },
+  { id: 'VENDER',       emoji: '💰', label: 'Vender' },
+  { id: 'NUTRIR',       emoji: '🌐', label: 'Nutrir' },
+  { id: 'EQUIPA',       emoji: '👥', label: 'Equipa' },
 ];
 
 export const COLLABORATORS = [
   { name: 'Nuno',        defaultPillar: 'INOVAR'      as PillarId },
   { name: 'Carlos',      defaultPillar: 'INOVAR'      as PillarId },
-  { name: 'Jo\u00e3o Filipe', defaultPillar: 'TRANSFORMAR' as PillarId },
+  { name: 'João Filipe', defaultPillar: 'TRANSFORMAR' as PillarId },
   { name: 'Volodymyr',   defaultPillar: 'TRANSFORMAR' as PillarId },
   { name: 'Miguel',      defaultPillar: 'VENDER'      as PillarId },
-  { name: 'Gra\u00e7a',       defaultPillar: 'VENDER'      as PillarId },
+  { name: 'Graça',       defaultPillar: 'VENDER'      as PillarId },
   { name: 'Laura',       defaultPillar: 'NUTRIR'      as PillarId },
-  { name: 'Jo\u00e3o Pedro',  defaultPillar: 'EQUIPA'      as PillarId },
+  { name: 'João Pedro',  defaultPillar: 'EQUIPA'      as PillarId },
 ];

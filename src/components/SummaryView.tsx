@@ -53,7 +53,7 @@ export default function SummaryView({ session, contributors }: SummaryViewProps)
     <div className="max-w-3xl mx-auto px-6 md:px-16 py-10">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 mb-10 text-[11px] font-bold uppercase tracking-widest text-secondary/60">
-        <span>Sess\u00f5es</span>
+        <span>Sessões</span>
         <span className="material-symbols-outlined text-sm opacity-40">chevron_right</span>
         <span>{session.name}</span>
         <span className="material-symbols-outlined text-sm opacity-40">chevron_right</span>
@@ -62,8 +62,8 @@ export default function SummaryView({ session, contributors }: SummaryViewProps)
 
       {/* Header */}
       <header className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">Visualiza\u00e7\u00e3o de Resumo</h1>
-        <p className="text-secondary text-sm">{session.name} \u2014 {formatDate(session.date)}</p>
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">Visualização de Resumo</h1>
+        <p className="text-secondary text-sm">{session.name} — {formatDate(session.date)}</p>
       </header>
 
       {/* Loading indicator */}
@@ -74,7 +74,7 @@ export default function SummaryView({ session, contributors }: SummaryViewProps)
             <span className="w-2.5 h-2.5 rounded-full bg-primary-container" />
             <span className="w-2.5 h-2.5 rounded-full bg-primary-container" />
           </div>
-          <span className="text-sm text-secondary italic">A gerar s\u00edntese executiva...</span>
+          <span className="text-sm text-secondary italic">A gerar síntese executiva...</span>
         </div>
       )}
 

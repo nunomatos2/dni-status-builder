@@ -82,17 +82,17 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
   const getStatusPills = (c: Contributor) => {
     const pills: { label: string; color: string; filled: boolean }[] = [
       {
-        label: c.content ? '\u2713 Progresso' : '\u25CB Progresso',
+        label: c.content ? '✓ Progresso' : '○ Progresso',
         color: c.content ? 'bg-emerald/10 text-emerald' : 'bg-zinc-100 text-zinc-400',
         filled: !!c.content,
       },
       {
-        label: c.concerns ? '\u26a0 Preocupa\u00e7\u00f5es' : '',
+        label: c.concerns ? '⚠ Preocupações' : '',
         color: 'bg-amber/10 text-amber',
         filled: !!c.concerns,
       },
       {
-        label: c.approvals ? '\u2713 Pedidos' : '',
+        label: c.approvals ? '✓ Pedidos' : '',
         color: 'bg-blue/10 text-blue',
         filled: !!c.approvals,
       },
@@ -116,7 +116,7 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
     <div className="px-6 md:px-12 py-10 max-w-7xl">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 mb-10 text-[11px] font-bold uppercase tracking-widest text-secondary/60">
-        <span>Sess\u00f5es</span>
+        <span>Sessões</span>
         <span className="material-symbols-outlined text-sm opacity-40">chevron_right</span>
         <span className="text-on-surface">{session.name}</span>
       </div>
@@ -153,7 +153,7 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
               <div className="space-y-3">
                 {pillarContribs.length === 0 ? (
                   <div className="bg-surface-lowest p-6 text-center" style={{ borderLeft: '4px solid #b5000b' }}>
-                    <p className="text-[11px] text-zinc-400 uppercase tracking-widest">Sem contribui\u00e7\u00f5es</p>
+                    <p className="text-[11px] text-zinc-400 uppercase tracking-widest">Sem contribuições</p>
                   </div>
                 ) : (
                   pillarContribs.map(contrib => (
@@ -165,7 +165,7 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Respons\u00e1vel</span>
+                          <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Responsável</span>
                           <p className="text-base font-bold tracking-tight">{contrib.name}</p>
                         </div>
                         <div className="flex gap-1.5 flex-wrap justify-end">
@@ -217,7 +217,7 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
       <Modal open={showAddModal} onClose={() => { setShowAddModal(false); setSelectedCollab(null); setSelectedPillar(''); }} title="Adicionar Contribuinte">
         <div className="space-y-5">
           {availableCollabs.length === 0 ? (
-            <p className="text-secondary text-sm text-center py-4">Todos os colaboradores j\u00e1 foram adicionados.</p>
+            <p className="text-secondary text-sm text-center py-4">Todos os colaboradores já foram adicionados.</p>
           ) : (
             <>
               <div>

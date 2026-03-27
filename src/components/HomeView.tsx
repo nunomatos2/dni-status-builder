@@ -32,7 +32,7 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
       }
       setContributorCounts(counts);
     } catch (err) {
-      console.error('Erro ao carregar sess\u00f5es:', err);
+      console.error('Erro ao carregar sessões:', err);
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
       setNewDate('');
       onSelectSession(session);
     } catch (err) {
-      console.error('Erro ao criar sess\u00e3o:', err);
+      console.error('Erro ao criar sessão:', err);
     } finally {
       setCreating(false);
     }
@@ -58,12 +58,12 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!confirm('Tem a certeza que deseja eliminar esta sess\u00e3o? Todos os contributos ser\u00e3o perdidos.')) return;
+    if (!confirm('Tem a certeza que deseja eliminar esta sessão? Todos os contributos serão perdidos.')) return;
     try {
       await deleteSession(id);
       setSessions(prev => prev.filter(s => s.id !== id));
     } catch (err) {
-      console.error('Erro ao eliminar sess\u00e3o:', err);
+      console.error('Erro ao eliminar sessão:', err);
     }
   };
 
@@ -88,14 +88,14 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
       <div className="flex items-center gap-2 mb-10 text-[11px] font-bold uppercase tracking-widest text-secondary/60">
         <span>DNI Status</span>
         <span className="material-symbols-outlined text-sm opacity-40">chevron_right</span>
-        <span className="text-on-surface">Dashboard de Sess\u00f5es</span>
+        <span className="text-on-surface">Dashboard de Sessões</span>
       </div>
 
       {/* Header */}
       <header className="max-w-4xl mb-12">
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">Sess\u00f5es Recentes</h1>
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">Sessões Recentes</h1>
         <p className="text-secondary text-sm leading-relaxed max-w-xl">
-          Gerencie as atualiza\u00e7\u00f5es de status quinzenais da Dire\u00e7\u00e3o Digital. Compile contributos, valide pilares e publique relat\u00f3rios executivos.
+          Gerencie as atualizações de status quinzenais da Direção Digital. Compile contributos, valide pilares e publique relatórios executivos.
         </p>
       </header>
 
@@ -105,15 +105,15 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
           <div className="w-16 h-16 bg-surface-low rounded-full flex items-center justify-center mb-6">
             <span className="material-symbols-outlined text-3xl text-secondary">folder_open</span>
           </div>
-          <h2 className="text-2xl font-bold tracking-tight mb-2">Nenhuma sess\u00e3o iniciada</h2>
+          <h2 className="text-2xl font-bold tracking-tight mb-2">Nenhuma sessão iniciada</h2>
           <p className="text-secondary text-sm mb-8 max-w-sm">
-            Comece a construir o status da DNI criando a sua primeira sess\u00e3o quinzenal.
+            Comece a construir o status da DNI criando a sua primeira sessão quinzenal.
           </p>
           <button
             onClick={onOpenModal}
             className="bg-linear-to-r from-primary-container to-primary text-on-primary px-8 py-3 text-[12px] font-bold uppercase tracking-widest flex items-center gap-2 rounded-sm hover:opacity-90 active:scale-95 transition-all"
           >
-            Criar Primeira Sess\u00e3o
+            Criar Primeira Sessão
           </button>
         </div>
       ) : (
@@ -131,7 +131,7 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
                 <div className="flex justify-between items-start mb-6">
                   <div>
                     <span className="text-[10px] font-bold text-primary uppercase tracking-[0.1em] mb-1 block">
-                      Sess\u00e3o
+                      Sessão
                     </span>
                     <h3 className="text-xl font-bold tracking-tight">{session.name}</h3>
                     <p className="text-secondary text-sm">{formatDate(session.date)}</p>
@@ -178,17 +178,17 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
       )}
 
       {/* New session modal */}
-      <Modal open={showModal} onClose={onCloseModal} title="Nova Sess\u00e3o">
+      <Modal open={showModal} onClose={onCloseModal} title="Nova Sessão">
         <div className="space-y-5">
           <div>
             <label className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant block mb-2">
-              Nome da Sess\u00e3o
+              Nome da Sessão
             </label>
             <input
               type="text"
               value={newName}
               onChange={e => setNewName(e.target.value)}
-              placeholder="Ex: Ponto de Situa\u00e7\u00e3o Q2 \u2014 Maio"
+              placeholder="Ex: Ponto de Situação Q2 — Maio"
               className="w-full bg-transparent border-b-2 border-outline-variant/30 focus:border-primary px-1 py-2 text-sm outline-none transition-colors placeholder:text-zinc-300"
             />
           </div>
@@ -208,7 +208,7 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
             disabled={!newName.trim() || !newDate || creating}
             className="w-full bg-linear-to-r from-primary-container to-primary text-on-primary py-3 text-[12px] font-bold uppercase tracking-widest rounded-sm hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
           >
-            {creating ? 'A criar...' : 'Criar Sess\u00e3o'}
+            {creating ? 'A criar...' : 'Criar Sessão'}
           </button>
         </div>
       </Modal>

@@ -18,7 +18,7 @@ export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateS
               DNI Status Builder
             </span>
             <span className="text-[9px] font-bold uppercase tracking-widest text-secondary -mt-0.5">
-              Dire\u00e7\u00e3o Digital e Inova\u00e7\u00e3o
+              Direção Digital e Inovação
             </span>
           </div>
         </div>
@@ -33,7 +33,7 @@ export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateS
             >
               <span className="material-symbols-outlined text-sm">arrow_back</span>
               <span className="text-[11px] font-bold uppercase tracking-wider truncate">
-                {view === 'session' && 'Sess\u00f5es'}
+                {view === 'session' && 'Sessões'}
                 {view === 'editor' && 'Guardar e voltar'}
                 {view === 'summary' && 'Voltar'}
               </span>
@@ -50,7 +50,7 @@ export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateS
             className="bg-linear-to-r from-primary-container to-primary text-on-primary px-4 py-2 text-[11px] font-bold uppercase tracking-widest rounded-sm flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all"
           >
             <span className="material-symbols-outlined text-base">add</span>
-            <span className="hidden sm:inline">Nova Sess\u00e3o</span>
+            <span className="hidden sm:inline">Nova Sessão</span>
           </button>
         )}
 

@@ -64,7 +64,7 @@ export default function EditorView({ contributor, onBack, onRemoved, onUpdated }
   };
 
   const handleRemove = async () => {
-    if (!confirm(`Remover o contributo de ${contributor.name}? Esta a\u00e7\u00e3o n\u00e3o pode ser revertida.`)) return;
+    if (!confirm(`Remover o contributo de ${contributor.name}? Esta ação não pode ser revertida.`)) return;
     try {
       await deleteContributor(contributor.id);
       onRemoved();
@@ -105,12 +105,12 @@ export default function EditorView({ contributor, onBack, onRemoved, onUpdated }
               value={content}
               onChange={e => handleContentChange(e.target.value)}
               rows={10}
-              placeholder="Descreva as principais vit\u00f3rias do per\u00edodo..."
+              placeholder="Descreva as principais vitórias do período..."
               className="w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed"
             />
           </div>
           <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">
-            Dica: foque-se em resultados tang\u00edveis e m\u00e9tricas de impacto.
+            Dica: foque-se em resultados tangíveis e métricas de impacto.
           </p>
         </section>
 
@@ -118,7 +118,7 @@ export default function EditorView({ contributor, onBack, onRemoved, onUpdated }
         <section>
           <div className="flex items-center justify-between mb-4">
             <label className="text-[12px] font-bold uppercase tracking-wider text-on-surface-variant">
-              \u26a0\ufe0f Preocupa\u00e7\u00f5es
+              ⚠️ Preocupações
             </label>
             <span className="text-[10px] text-zinc-400 uppercase tracking-widest">bloqueios & riscos</span>
           </div>
@@ -127,18 +127,18 @@ export default function EditorView({ contributor, onBack, onRemoved, onUpdated }
               value={concerns}
               onChange={e => handleConcernsChange(e.target.value)}
               rows={4}
-              placeholder="O que est\u00e1 a impedir o progresso?"
+              placeholder="O que está a impedir o progresso?"
               className="w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed"
             />
           </div>
-          <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">opcional \u2014 uma por linha</p>
+          <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">opcional — uma por linha</p>
         </section>
 
         {/* Approvals */}
         <section>
           <div className="flex items-center justify-between mb-4">
             <label className="text-[12px] font-bold uppercase tracking-wider text-on-surface-variant">
-              \u2713 Pedidos de Aprova\u00e7\u00e3o
+              ✓ Pedidos de Aprovação
             </label>
             <span className="text-[10px] text-zinc-400 uppercase tracking-widest">next steps</span>
           </div>
@@ -147,11 +147,11 @@ export default function EditorView({ contributor, onBack, onRemoved, onUpdated }
               value={approvals}
               onChange={e => handleApprovalsChange(e.target.value)}
               rows={4}
-              placeholder="Que decis\u00f5es precisam de ser tomadas pela dire\u00e7\u00e3o?"
+              placeholder="Que decisões precisam de ser tomadas pela direção?"
               className="w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed"
             />
           </div>
-          <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">opcional \u2014 uma por linha</p>
+          <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">opcional — uma por linha</p>
         </section>
 
         {/* Footer */}
@@ -163,7 +163,7 @@ export default function EditorView({ contributor, onBack, onRemoved, onUpdated }
           <div className="flex items-center gap-4">
             <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-medium">
               {saveStatus === 'saving' && 'A guardar...'}
-              {saveStatus === 'saved' && 'Guardado \u2713'}
+              {saveStatus === 'saved' && 'Guardado ✓'}
               {saveStatus === 'idle' && 'Auto-save ativo'}
             </span>
             <div className={`w-1.5 h-1.5 rounded-full transition-colors ${
