@@ -5,12 +5,11 @@ import type { Contributor } from '../types/dni';
 
 interface EditorViewProps {
   contributor: Contributor;
-  onBack: () => void;
   onRemoved: () => void;
   onUpdated: (c: Contributor) => void;
 }
 
-export default function EditorView({ contributor, onBack, onRemoved, onUpdated }: EditorViewProps) {
+export default function EditorView({ contributor, onRemoved, onUpdated }: EditorViewProps) {
   const [content, setContent] = useState(contributor.content || '');
   const [concerns, setConcerns] = useState(contributor.concerns || '');
   const [approvals, setApprovals] = useState(contributor.approvals || '');

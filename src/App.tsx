@@ -88,7 +88,6 @@ export default function App() {
         {view === 'editor' && selectedContributor && (
           <EditorView
             contributor={selectedContributor}
-            onBack={() => { setSelectedContributor(null); setView('session'); }}
             onRemoved={handleContributorRemoved}
             onUpdated={handleContributorUpdated}
           />
