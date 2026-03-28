@@ -5,9 +5,10 @@ interface TopBarProps {
   onSave?: () => void;
   onGenerateSummary?: () => void;
   saveLabel?: string;
+  summaryExists?: boolean;
 }
 
-export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateSummary, saveLabel }: TopBarProps) {
+export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateSummary, saveLabel, summaryExists }: TopBarProps) {
   return (
     <header className="fixed top-0 w-full h-14 z-50 bg-white/80 backdrop-blur-[20px] border-b-[3px] border-primary-container flex justify-between items-center px-4 md:px-6">
       <div className="flex items-center gap-4 md:gap-6 min-w-0">
@@ -18,7 +19,7 @@ export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateS
               DNI Status Builder
             </span>
             <span className="text-[9px] font-bold uppercase tracking-widest text-secondary -mt-0.5">
-              Direção Digital e Inovação
+              Direção Digital, Novos Canais e Inovação
             </span>
           </div>
         </div>
@@ -59,8 +60,12 @@ export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateS
             onClick={onGenerateSummary}
             className="bg-linear-to-r from-primary-container to-primary text-on-primary px-4 py-2 text-[11px] font-bold uppercase tracking-widest rounded-sm flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all"
           >
-            <span className="material-symbols-outlined text-base">auto_awesome</span>
-            <span className="hidden sm:inline">Gerar Resumo IA</span>
+            <span className="material-symbols-outlined text-base">
+              {summaryExists ? 'description' : 'auto_awesome'}
+            </span>
+            <span className="hidden sm:inline">
+              {summaryExists ? 'Ver Resumo' : 'Gerar Resumo IA'}
+            </span>
           </button>
         )}
 

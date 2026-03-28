@@ -62,6 +62,7 @@ export default function App() {
         onBack={handleBack}
         onNewSession={() => setShowNewSessionModal(true)}
         onGenerateSummary={view === 'session' && contributors.length > 0 ? handleGenerateSummary : undefined}
+        summaryExists={!!(selectedSession?.summary)}
       />
 
       <main className="pt-14">
@@ -96,7 +97,7 @@ export default function App() {
         {view === 'summary' && selectedSession && (
           <SummaryView
             session={selectedSession}
-            contributors={contributors}
+            onSessionUpdated={(updated) => setSelectedSession(updated)}
           />
         )}
       </main>

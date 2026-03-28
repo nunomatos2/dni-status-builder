@@ -22,6 +22,7 @@ export interface Session {
   name: string;
   date: string;
   created_at: string;
+  summary?: string;
 }
 
 export const PILLARS: Pillar[] = [

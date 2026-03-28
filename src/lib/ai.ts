@@ -1,8 +1,8 @@
-import { supabase } from './supabase';
+import { supabase, updateSessionSummary } from './supabase';
 import { PILLARS } from '../types/dni';
 import type { Session, Contributor } from '../types/dni';
 
-export async function generateSummary(session: Session, contributors: Contributor[]): Promise<string> {
+export async function generateSummary(session: Session, contributors: Contributor[]): Promise<{ text: string; updatedSession: Session }> {
   const dateFormatted = new Date(session.date).toLocaleDateString('pt-PT', {
     day: '2-digit',
     month: 'long',
@@ -23,7 +23,7 @@ export async function generateSummary(session: Session, contributors: Contributo
     }
   }
 
-  const prompt = `És um especialista em comunicação executiva corporativa portuguesa. Tens à tua frente as notas de ponto de situação quinzenal da Direção de Novos Canais e Inovação (DNI) dos CTT — Correios de Portugal, preenchidas pelos líderes de cada pilar (os "2Ls").
+  const prompt = `Tens à tua frente as notas de ponto de situação quinzenal da Direção Digital, Novos Canais e Inovação (DNI) dos CTT — Correios de Portugal, preenchidas pelos líderes de cada pilar (os "2Ls").
 
 O teu objetivo é gerar um ponto de situação executivo, em português de Portugal, com tom formal mas direto, destinado ao João Bento, CEO dos CTT.
 
@@ -49,5 +49,6 @@ ${notesBlock}`;
   if (data?.error) throw new Error(data.error);
   if (!data?.text) throw new Error('Resposta vazia da IA');
 
-  return data.text;
+  const updatedSession = await updateSessionSummary(session.id, data.text);
+  return { text: data.text, updatedSession };
 }

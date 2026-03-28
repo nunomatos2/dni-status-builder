@@ -44,9 +44,21 @@ export default function EditorView({ contributor, onBack, onRemoved, onUpdated }
     timerRef.current = setTimeout(() => save(c, co, ap), 1500);
   }, [save]);
 
+  const contentRef = useRef(content);
+  const concernsRef = useRef(concerns);
+  const approvalsRef = useRef(approvals);
+  contentRef.current = content;
+  concernsRef.current = concerns;
+  approvalsRef.current = approvals;
+
   useEffect(() => {
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, []);
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        save(contentRef.current, concernsRef.current, approvalsRef.current);
+      }
+    };
+  }, [save]);
 
   const handleContentChange = (val: string) => { setContent(val); scheduleAutoSave(val, concerns, approvals); };
   const handleConcernsChange = (val: string) => { setConcerns(val); scheduleAutoSave(content, val, approvals); };
@@ -56,11 +68,6 @@ export default function EditorView({ contributor, onBack, onRemoved, onUpdated }
     if (timerRef.current) clearTimeout(timerRef.current);
     await save(content, concerns, approvals);
     onBack();
-  };
-
-  const handleExplicitSave = async () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    await save(content, concerns, approvals);
   };
 
   const handleRemove = async () => {
@@ -173,8 +180,6 @@ export default function EditorView({ contributor, onBack, onRemoved, onUpdated }
         </div>
       </div>
 
-      {/* Hidden save/back handlers exposed to TopBar via props */}
-      <div className="hidden" data-save={handleExplicitSave} data-saveback={handleSaveAndBack} />
     </div>
   );
 }

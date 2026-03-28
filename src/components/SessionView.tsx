@@ -207,8 +207,10 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
             onClick={onGenerateSummary}
             className="bg-linear-to-r from-primary-container to-primary text-on-primary px-6 py-3 text-[12px] font-bold uppercase tracking-widest rounded-sm flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all"
           >
-            <span className="material-symbols-outlined text-base">auto_awesome</span>
-            Gerar Resumo IA
+            <span className="material-symbols-outlined text-base">
+              {session.summary ? 'description' : 'auto_awesome'}
+            </span>
+            {session.summary ? 'Ver Resumo' : 'Gerar Resumo IA'}
           </button>
         </div>
       )}

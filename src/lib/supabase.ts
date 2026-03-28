@@ -64,3 +64,14 @@ export async function deleteContributor(id: string): Promise<void> {
     .eq('id', id);
   if (error) throw error;
 }
+
+export async function updateSessionSummary(id: string, summary: string): Promise<Session> {
+  const { data, error } = await supabase
+    .from('dni_sessions')
+    .update({ summary })
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
