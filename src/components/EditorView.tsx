@@ -64,12 +64,6 @@ export default function EditorView({ contributor, onBack, onRemoved, onUpdated }
   const handleConcernsChange = (val: string) => { setConcerns(val); scheduleAutoSave(content, val, approvals); };
   const handleApprovalsChange = (val: string) => { setApprovals(val); scheduleAutoSave(content, concerns, val); };
 
-  const handleSaveAndBack = async () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    await save(content, concerns, approvals);
-    onBack();
-  };
-
   const handleRemove = async () => {
     if (!confirm(`Remover o contributo de ${contributor.name}? Esta ação não pode ser revertida.`)) return;
     try {
