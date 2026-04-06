@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { Session, Contributor } from './types/dni';
+import { isSessionActive } from './types/dni';
 import LoginGate from './components/LoginGate';
 import TopBar from './components/TopBar';
 import HomeView from './components/HomeView';
@@ -90,6 +91,7 @@ export default function App() {
         {view === 'editor' && selectedContributor && (
           <EditorView
             contributor={selectedContributor}
+            readOnly={selectedSession ? !isSessionActive(selectedSession) : false}
             onRemoved={handleContributorRemoved}
             onUpdated={handleContributorUpdated}
           />

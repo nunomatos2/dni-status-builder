@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getSessions, createSession, deleteSession, getContributors } from '../lib/supabase';
-import { PILLARS } from '../types/dni';
+import { PILLARS, isSessionActive } from '../types/dni';
 import type { Session } from '../types/dni';
 import Modal from './Modal';
 
@@ -129,18 +129,30 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {sessions.map(session => {
             const info = contributorCounts[session.id];
+            const active = isSessionActive(session);
             return (
               <article
                 key={session.id}
                 onClick={() => onSelectSession(session)}
                 className="group relative bg-surface-lowest p-6 cursor-pointer transition-all hover:translate-x-0.5"
-                style={{ borderLeft: '4px solid #b5000b' }}
+                style={{ borderLeft: `4px solid ${active ? '#b5000b' : '#d4d4d8'}` }}
               >
                 <div className="flex justify-between items-start mb-6">
                   <div>
-                    <span className="text-[10px] font-bold text-primary uppercase tracking-[0.1em] mb-1 block">
-                      Sessão
-                    </span>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-bold text-primary uppercase tracking-[0.1em] block">
+                        Sessão
+                      </span>
+                      {active ? (
+                        <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm bg-emerald/10 text-emerald">
+                          Sessão ativa
+                        </span>
+                      ) : (
+                        <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm bg-zinc-100 text-zinc-400">
+                          Sessão fechada
+                        </span>
+                      )}
+                    </div>
                     <h3 className="text-xl font-bold tracking-tight">{session.name}</h3>
                     <p className="text-secondary text-sm">{formatDate(session.date)}</p>
                   </div>
@@ -169,7 +181,7 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
 
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold uppercase tracking-widest text-primary">
-                    Continuar Builder
+                    {active ? 'Continuar Builder' : 'Ver Sessão'}
                   </span>
                   <button
                     onClick={(e) => handleDelete(session.id, e)}

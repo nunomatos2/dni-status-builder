@@ -30,8 +30,13 @@ export const PILLARS: Pillar[] = [
   { id: 'TRANSFORMAR',  emoji: '⚙️', label: 'Transformar' },
   { id: 'VENDER',       emoji: '💰', label: 'Vender' },
   { id: 'NUTRIR',       emoji: '🌐', label: 'Nutrir' },
-  { id: 'EQUIPA',       emoji: '👥', label: 'Equipa' },
+  { id: 'EQUIPA',       emoji: '👥', label: 'Equipa e Analítica' },
 ];
+
+export function isSessionActive(session: Session): boolean {
+  const sessionDate = new Date(session.date + 'T23:59:59');
+  return sessionDate >= new Date();
+}
 
 export const COLLABORATORS = [
   { name: 'Nuno',        defaultPillar: 'INOVAR'      as PillarId },
