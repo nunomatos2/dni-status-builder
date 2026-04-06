@@ -55,11 +55,10 @@ export async function upsertContributor(contributor: Partial<Contributor> & { se
     ...contributor,
     updated_at: new Date().toISOString(),
   };
-  const { data, error } = await supabase
-    .from('dni_contributors')
-    .upsert(payload, { onConflict: 'id' })
-    .select()
-    .single();
+  const query = contributor.id
+    ? supabase.from('dni_contributors').update(payload).eq('id', contributor.id)
+    : supabase.from('dni_contributors').insert(payload);
+  const { data, error } = await query.select().single();
   if (error) throw error;
   return data;
 }

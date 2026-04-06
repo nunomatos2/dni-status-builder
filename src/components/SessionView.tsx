@@ -18,6 +18,7 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
   const [selectedCollab, setSelectedCollab] = useState<string | null>(null);
   const [selectedPillar, setSelectedPillar] = useState<PillarId | ''>('');
   const [adding, setAdding] = useState(false);
+  const [addError, setAddError] = useState<string | null>(null);
 
   const loadContributors = async () => {
     setLoading(true);
@@ -45,6 +46,7 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
   const handleAdd = async () => {
     if (!selectedCollab || !selectedPillar) return;
     setAdding(true);
+    setAddError(null);
     try {
       const newContrib = await upsertContributor({
         session_id: session.id,
@@ -58,7 +60,10 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
       setShowAddModal(false);
       setSelectedCollab(null);
       setSelectedPillar('');
+      setAddError(null);
     } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro desconhecido';
+      setAddError(`Não foi possível adicionar contribuinte: ${message}`);
       console.error('Erro ao adicionar contribuinte:', err);
     } finally {
       setAdding(false);
@@ -216,8 +221,13 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
       )}
 
       {/* Add contributor modal */}
-      <Modal open={showAddModal} onClose={() => { setShowAddModal(false); setSelectedCollab(null); setSelectedPillar(''); }} title="Adicionar Contribuinte">
+      <Modal open={showAddModal} onClose={() => { setShowAddModal(false); setSelectedCollab(null); setSelectedPillar(''); setAddError(null); }} title="Adicionar Contribuinte">
         <div className="space-y-5">
+          {addError && (
+            <div className="bg-error/10 border-l-4 border-error px-4 py-3 text-sm text-error">
+              {addError}
+            </div>
+          )}
           {availableCollabs.length === 0 ? (
             <p className="text-secondary text-sm text-center py-4">Todos os colaboradores já foram adicionados.</p>
           ) : (
