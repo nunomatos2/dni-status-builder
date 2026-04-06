@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getSessions, createSession, deleteSession, getContributors } from '../lib/supabase';
 import { PILLARS } from '../types/dni';
-import type { Session, Contributor } from '../types/dni';
+import type { Session } from '../types/dni';
 import Modal from './Modal';
 
 interface HomeViewProps {
