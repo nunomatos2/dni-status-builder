@@ -33,6 +33,17 @@ export const PILLARS: Pillar[] = [
   { id: 'EQUIPA',       emoji: '👥', label: 'Equipa e Analítica' },
 ];
 
+export interface Feedback {
+  id: string;
+  message: string;
+  context_view: string;
+  context_session_id?: string;
+  context_session_name?: string;
+  context_pillar?: string;
+  context_contributor?: string;
+  created_at: string;
+}
+
 export function isSessionActive(session: Session): boolean {
   const sessionDate = new Date(session.date + 'T23:59:59');
   return sessionDate >= new Date();
