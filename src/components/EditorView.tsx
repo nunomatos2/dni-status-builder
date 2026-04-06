@@ -5,11 +5,12 @@ import type { Contributor } from '../types/dni';
 
 interface EditorViewProps {
   contributor: Contributor;
+  readOnly?: boolean;
   onRemoved: () => void;
   onUpdated: (c: Contributor) => void;
 }
 
-export default function EditorView({ contributor, onRemoved, onUpdated }: EditorViewProps) {
+export default function EditorView({ contributor, readOnly, onRemoved, onUpdated }: EditorViewProps) {
   const [content, setContent] = useState(contributor.content || '');
   const [concerns, setConcerns] = useState(contributor.concerns || '');
   const [approvals, setApprovals] = useState(contributor.approvals || '');
@@ -111,17 +112,21 @@ export default function EditorView({ contributor, onRemoved, onUpdated }: Editor
         <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
           {pillar?.emoji} {pillar?.id} — Contributo de {contributor.name}
         </h1>
-        <button
-          onClick={handleCopyPrevious}
-          disabled={copyStatus === 'loading'}
-          className="mt-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-primary hover:text-primary-container transition-colors disabled:opacity-40"
-        >
-          <span className="material-symbols-outlined text-base">content_copy</span>
-          {copyStatus === 'idle' && 'Copiar último preenchimento'}
-          {copyStatus === 'loading' && 'A procurar...'}
-          {copyStatus === 'done' && 'Copiado ✓'}
-          {copyStatus === 'empty' && 'Sem preenchimento anterior'}
-        </button>
+        {readOnly ? (
+          <p className="mt-4 text-zinc-400 text-sm italic">Sessão fechada — modo de leitura.</p>
+        ) : (
+          <button
+            onClick={handleCopyPrevious}
+            disabled={copyStatus === 'loading'}
+            className="mt-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-primary hover:text-primary-container transition-colors disabled:opacity-40"
+          >
+            <span className="material-symbols-outlined text-base">content_copy</span>
+            {copyStatus === 'idle' && 'Copiar último preenchimento'}
+            {copyStatus === 'loading' && 'A procurar...'}
+            {copyStatus === 'done' && 'Copiado ✓'}
+            {copyStatus === 'empty' && 'Sem preenchimento anterior'}
+          </button>
+        )}
       </header>
 
       <div className="space-y-14">
@@ -137,9 +142,10 @@ export default function EditorView({ contributor, onRemoved, onUpdated }: Editor
             <textarea
               value={content}
               onChange={e => handleContentChange(e.target.value)}
+              readOnly={readOnly}
               rows={10}
               placeholder="Descreva as principais vitórias do período..."
-              className="w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed"
+              className={`w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed ${readOnly ? 'cursor-default' : ''}`}
             />
           </div>
           <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">
@@ -159,9 +165,10 @@ export default function EditorView({ contributor, onRemoved, onUpdated }: Editor
             <textarea
               value={concerns}
               onChange={e => handleConcernsChange(e.target.value)}
+              readOnly={readOnly}
               rows={4}
               placeholder="O que está a impedir o progresso?"
-              className="w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed"
+              className={`w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed ${readOnly ? 'cursor-default' : ''}`}
             />
           </div>
           <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">opcional — uma por linha</p>
@@ -179,31 +186,34 @@ export default function EditorView({ contributor, onRemoved, onUpdated }: Editor
             <textarea
               value={approvals}
               onChange={e => handleApprovalsChange(e.target.value)}
+              readOnly={readOnly}
               rows={4}
               placeholder="Que decisões precisam de ser tomadas pela direção?"
-              className="w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed"
+              className={`w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed ${readOnly ? 'cursor-default' : ''}`}
             />
           </div>
           <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">opcional — uma por linha</p>
         </section>
 
         {/* Footer */}
-        <div className="pt-14 border-t border-zinc-100 flex justify-between items-center">
-          <button onClick={handleRemove} className="group flex items-center gap-2 text-zinc-400 hover:text-error transition-colors">
-            <span className="material-symbols-outlined text-sm">person_remove</span>
-            <span className="text-[10px] font-bold uppercase tracking-widest">Remover Contribuinte</span>
-          </button>
-          <div className="flex items-center gap-4">
-            <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-medium">
-              {saveStatus === 'saving' && 'A guardar...'}
-              {saveStatus === 'saved' && 'Guardado ✓'}
-              {saveStatus === 'idle' && 'Auto-save ativo'}
-            </span>
-            <div className={`w-1.5 h-1.5 rounded-full transition-colors ${
-              saveStatus === 'saving' ? 'bg-amber' : saveStatus === 'saved' ? 'bg-emerald' : 'bg-emerald'
-            }`} />
+        {!readOnly && (
+          <div className="pt-14 border-t border-zinc-100 flex justify-between items-center">
+            <button onClick={handleRemove} className="group flex items-center gap-2 text-zinc-400 hover:text-error transition-colors">
+              <span className="material-symbols-outlined text-sm">person_remove</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">Remover Contribuinte</span>
+            </button>
+            <div className="flex items-center gap-4">
+              <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-medium">
+                {saveStatus === 'saving' && 'A guardar...'}
+                {saveStatus === 'saved' && 'Guardado ✓'}
+                {saveStatus === 'idle' && 'Auto-save ativo'}
+              </span>
+              <div className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                saveStatus === 'saving' ? 'bg-amber' : saveStatus === 'saved' ? 'bg-emerald' : 'bg-emerald'
+              }`} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
     </div>

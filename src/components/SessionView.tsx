@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getContributors, upsertContributor, deleteContributor } from '../lib/supabase';
-import { PILLARS, COLLABORATORS } from '../types/dni';
+import { PILLARS, COLLABORATORS, isSessionActive } from '../types/dni';
 import type { Session, Contributor, PillarId } from '../types/dni';
 import Modal from './Modal';
 
@@ -81,6 +81,8 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
     }
   };
 
+  const active = isSessionActive(session);
+
   const formatDate = (date: string) =>
     new Date(date).toLocaleDateString('pt-PT', { day: '2-digit', month: 'long', year: 'numeric' });
 
@@ -128,8 +130,24 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
 
       {/* Header */}
       <header className="max-w-4xl mb-12">
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">{session.name}</h1>
+        <div className="flex items-center gap-3 mb-2">
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">{session.name}</h1>
+          {active ? (
+            <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-sm bg-emerald/10 text-emerald">
+              Sessão ativa
+            </span>
+          ) : (
+            <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-sm bg-zinc-100 text-zinc-400">
+              Sessão fechada
+            </span>
+          )}
+        </div>
         <p className="text-secondary text-sm">{formatDate(session.date)}</p>
+        {!active && (
+          <p className="text-zinc-400 text-sm mt-2 italic">
+            Esta sessão está fechada. Os contributos não podem ser editados.
+          </p>
+        )}
       </header>
 
       {/* Pillars grid */}
@@ -146,12 +164,14 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
                     {pillar.id}
                   </span>
                 </div>
-                <button
-                  onClick={() => { setShowAddModal(true); }}
-                  className="text-[11px] font-bold uppercase tracking-widest text-primary hover:underline underline-offset-4"
-                >
-                  + Adicionar
-                </button>
+                {active && (
+                  <button
+                    onClick={() => { setShowAddModal(true); }}
+                    className="text-[11px] font-bold uppercase tracking-widest text-primary hover:underline underline-offset-4"
+                  >
+                    + Adicionar
+                  </button>
+                )}
               </div>
 
               {/* Contributors */}
@@ -164,8 +184,8 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
                   pillarContribs.map(contrib => (
                     <div
                       key={contrib.id}
-                      onClick={() => onSelectContributor(contrib)}
-                      className="group bg-surface-lowest p-5 cursor-pointer transition-all hover:translate-x-0.5"
+                      onClick={() => active && onSelectContributor(contrib)}
+                      className={`group bg-surface-lowest p-5 transition-all ${active ? 'cursor-pointer hover:translate-x-0.5' : 'cursor-default'}`}
                       style={{ borderLeft: '4px solid #b5000b' }}
                     >
                       <div className="flex items-start justify-between mb-2">
@@ -186,13 +206,15 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
                           {contrib.content.substring(0, 120)}{contrib.content.length > 120 ? '...' : ''}
                         </p>
                       )}
-                      <button
-                        onClick={(e) => handleRemove(contrib.id, e)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity mt-3 flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-error hover:bg-error/5 px-1 py-0.5"
-                      >
-                        <span className="material-symbols-outlined text-sm">delete</span>
-                        Remover
-                      </button>
+                      {active && (
+                        <button
+                          onClick={(e) => handleRemove(contrib.id, e)}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity mt-3 flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-error hover:bg-error/5 px-1 py-0.5"
+                        >
+                          <span className="material-symbols-outlined text-sm">delete</span>
+                          Remover
+                        </button>
+                      )}
                     </div>
                   ))
                 )}
