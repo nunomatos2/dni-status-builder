@@ -4,6 +4,13 @@ import type { Session, Contributor } from '../types/dni';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error(
+    'Variáveis de ambiente VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY são obrigatórias. ' +
+    'Verifique o ficheiro .env.'
+  );
+}
+
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function getSessions(): Promise<Session[]> {
@@ -48,11 +55,10 @@ export async function upsertContributor(contributor: Partial<Contributor> & { se
     ...contributor,
     updated_at: new Date().toISOString(),
   };
-  const { data, error } = await supabase
-    .from('dni_contributors')
-    .upsert(payload, { onConflict: 'id' })
-    .select()
-    .single();
+  const query = contributor.id
+    ? supabase.from('dni_contributors').update(payload).eq('id', contributor.id)
+    : supabase.from('dni_contributors').insert(payload);
+  const { data, error } = await query.select().single();
   if (error) throw error;
   return data;
 }
@@ -63,6 +69,20 @@ export async function deleteContributor(id: string): Promise<void> {
     .delete()
     .eq('id', id);
   if (error) throw error;
+}
+
+export async function getPreviousContribution(name: string, pillar: string, currentSessionId: string): Promise<Contributor | null> {
+  const { data, error } = await supabase
+    .from('dni_contributors')
+    .select('*, dni_sessions!inner(created_at)')
+    .eq('name', name)
+    .eq('pillar', pillar)
+    .neq('session_id', currentSessionId)
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
 }
 
 export async function updateSessionSummary(id: string, summary: string): Promise<Session> {
