@@ -71,6 +71,20 @@ export async function deleteContributor(id: string): Promise<void> {
   if (error) throw error;
 }
 
+export async function getPreviousContribution(name: string, pillar: string, currentSessionId: string): Promise<Contributor | null> {
+  const { data, error } = await supabase
+    .from('dni_contributors')
+    .select('*, dni_sessions!inner(created_at)')
+    .eq('name', name)
+    .eq('pillar', pillar)
+    .neq('session_id', currentSessionId)
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
 export async function updateSessionSummary(id: string, summary: string): Promise<Session> {
   const { data, error } = await supabase
     .from('dni_sessions')

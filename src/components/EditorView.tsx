@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { upsertContributor, deleteContributor } from '../lib/supabase';
+import { upsertContributor, deleteContributor, getPreviousContribution } from '../lib/supabase';
 import { PILLARS } from '../types/dni';
 import type { Contributor } from '../types/dni';
 
@@ -14,6 +14,7 @@ export default function EditorView({ contributor, onRemoved, onUpdated }: Editor
   const [concerns, setConcerns] = useState(contributor.concerns || '');
   const [approvals, setApprovals] = useState(contributor.approvals || '');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'loading' | 'done' | 'empty'>('idle');
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pillar = PILLARS.find(p => p.id === contributor.pillar);
 
@@ -63,6 +64,27 @@ export default function EditorView({ contributor, onRemoved, onUpdated }: Editor
   const handleConcernsChange = (val: string) => { setConcerns(val); scheduleAutoSave(content, val, approvals); };
   const handleApprovalsChange = (val: string) => { setApprovals(val); scheduleAutoSave(content, concerns, val); };
 
+  const handleCopyPrevious = async () => {
+    setCopyStatus('loading');
+    try {
+      const prev = await getPreviousContribution(contributor.name, contributor.pillar, contributor.session_id);
+      if (!prev || (!prev.content && !prev.concerns && !prev.approvals)) {
+        setCopyStatus('empty');
+        setTimeout(() => setCopyStatus('idle'), 2500);
+        return;
+      }
+      setContent(prev.content);
+      setConcerns(prev.concerns);
+      setApprovals(prev.approvals);
+      scheduleAutoSave(prev.content, prev.concerns, prev.approvals);
+      setCopyStatus('done');
+      setTimeout(() => setCopyStatus('idle'), 2500);
+    } catch (err) {
+      console.error('Erro ao copiar contributo anterior:', err);
+      setCopyStatus('idle');
+    }
+  };
+
   const handleRemove = async () => {
     if (!confirm(`Remover o contributo de ${contributor.name}? Esta ação não pode ser revertida.`)) return;
     try {
@@ -89,6 +111,17 @@ export default function EditorView({ contributor, onRemoved, onUpdated }: Editor
         <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
           {pillar?.emoji} {pillar?.id} — Contributo de {contributor.name}
         </h1>
+        <button
+          onClick={handleCopyPrevious}
+          disabled={copyStatus === 'loading'}
+          className="mt-4 flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-primary hover:text-primary-container transition-colors disabled:opacity-40"
+        >
+          <span className="material-symbols-outlined text-base">content_copy</span>
+          {copyStatus === 'idle' && 'Copiar último preenchimento'}
+          {copyStatus === 'loading' && 'A procurar...'}
+          {copyStatus === 'done' && 'Copiado ✓'}
+          {copyStatus === 'empty' && 'Sem preenchimento anterior'}
+        </button>
       </header>
 
       <div className="space-y-14">

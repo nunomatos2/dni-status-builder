@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { Session, Contributor } from './types/dni';
+import LoginGate from './components/LoginGate';
 import TopBar from './components/TopBar';
 import HomeView from './components/HomeView';
 import SessionView from './components/SessionView';
@@ -56,6 +57,7 @@ export default function App() {
   };
 
   return (
+    <LoginGate>
     <div className="min-h-screen bg-background">
       <TopBar
         view={view}
@@ -101,5 +103,6 @@ export default function App() {
         )}
       </main>
     </div>
+    </LoginGate>
   );
 }
