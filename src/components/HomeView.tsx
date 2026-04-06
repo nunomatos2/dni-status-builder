@@ -18,6 +18,7 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
   const [newName, setNewName] = useState('');
   const [newDate, setNewDate] = useState('');
   const [creating, setCreating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const loadSessions = async () => {
     setLoading(true);
@@ -25,11 +26,14 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
       const data = await getSessions();
       setSessions(data);
       const counts: Record<string, { count: number; pillars: string[] }> = {};
-      for (const s of data) {
-        const contribs: Contributor[] = await getContributors(s.id);
+      const contribResults = await Promise.all(
+        data.map(s => getContributors(s.id))
+      );
+      data.forEach((s, i) => {
+        const contribs = contribResults[i];
         const uniquePillars = [...new Set(contribs.map(c => c.pillar))];
         counts[s.id] = { count: contribs.length, pillars: uniquePillars };
-      }
+      });
       setContributorCounts(counts);
     } catch (err) {
       console.error('Erro ao carregar sessões:', err);
@@ -43,13 +47,17 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
   const handleCreate = async () => {
     if (!newName.trim() || !newDate) return;
     setCreating(true);
+    setError(null);
     try {
       const session = await createSession(newName.trim(), newDate);
       onCloseModal();
       setNewName('');
       setNewDate('');
+      setError(null);
       onSelectSession(session);
     } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro desconhecido';
+      setError(`Não foi possível criar a sessão: ${message}`);
       console.error('Erro ao criar sessão:', err);
     } finally {
       setCreating(false);
@@ -178,8 +186,13 @@ export default function HomeView({ onSelectSession, showModal, onCloseModal, onO
       )}
 
       {/* New session modal */}
-      <Modal open={showModal} onClose={onCloseModal} title="Nova Sessão">
+      <Modal open={showModal} onClose={() => { setError(null); onCloseModal(); }} title="Nova Sessão">
         <div className="space-y-5">
+          {error && (
+            <div className="bg-error/10 border-l-4 border-error px-4 py-3 text-sm text-error">
+              {error}
+            </div>
+          )}
           <div>
             <label className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant block mb-2">
               Nome da Sessão
