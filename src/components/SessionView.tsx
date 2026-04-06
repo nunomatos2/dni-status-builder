@@ -161,7 +161,7 @@ export default function SessionView({ session, onSelectContributor, onGenerateSu
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 bg-primary-container rounded-sm" />
                   <span className="text-[12px] font-black uppercase tracking-wider text-on-surface">
-                    {pillar.id}
+                    {pillar.label}
                   </span>
                 </div>
                 {active && (
