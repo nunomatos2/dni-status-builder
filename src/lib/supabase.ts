@@ -96,7 +96,7 @@ export async function updateSessionSummary(id: string, summary: string): Promise
   return data;
 }
 
-export async function submitFeedback(feedback: Omit<Feedback, 'id' | 'created_at'>): Promise<Feedback> {
+export async function submitFeedback(feedback: Omit<Feedback, 'id' | 'created_at' | 'status'>): Promise<Feedback> {
   const { data, error } = await supabase
     .from('dni_feedback')
     .insert(feedback)
@@ -113,4 +113,12 @@ export async function getFeedback(): Promise<Feedback[]> {
     .order('created_at', { ascending: false });
   if (error) throw error;
   return data ?? [];
+}
+
+export async function updateFeedbackStatus(ids: string[], status: 'open' | 'implemented'): Promise<void> {
+  const { error } = await supabase
+    .from('dni_feedback')
+    .update({ status })
+    .in('id', ids);
+  if (error) throw error;
 }

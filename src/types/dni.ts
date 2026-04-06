@@ -41,6 +41,7 @@ export interface Feedback {
   context_session_name?: string;
   context_pillar?: string;
   context_contributor?: string;
+  status: 'open' | 'implemented';
   created_at: string;
 }
 
