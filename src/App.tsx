@@ -7,8 +7,10 @@ import HomeView from './components/HomeView';
 import SessionView from './components/SessionView';
 import EditorView from './components/EditorView';
 import SummaryView from './components/SummaryView';
+import FeedbackView from './components/FeedbackView';
+import FeedbackButton from './components/FeedbackButton';
 
-type View = 'home' | 'session' | 'editor' | 'summary';
+type View = 'home' | 'session' | 'editor' | 'summary' | 'feedback';
 
 export default function App() {
   const [view, setView] = useState<View>('home');
@@ -37,6 +39,8 @@ export default function App() {
       setView('session');
     } else if (view === 'summary') {
       setView('session');
+    } else if (view === 'feedback') {
+      setView('home');
     }
   }, [view]);
 
@@ -65,6 +69,7 @@ export default function App() {
         onBack={handleBack}
         onNewSession={() => setShowNewSessionModal(true)}
         onGenerateSummary={view === 'session' && contributors.length > 0 ? handleGenerateSummary : undefined}
+        onFeedback={() => setView('feedback')}
         summaryExists={!!(selectedSession?.summary)}
       />
 
@@ -103,7 +108,19 @@ export default function App() {
             onSessionUpdated={(updated) => setSelectedSession(updated)}
           />
         )}
+
+        {view === 'feedback' && (
+          <FeedbackView />
+        )}
       </main>
+
+      <FeedbackButton
+        context={{
+          view,
+          session: selectedSession,
+          contributor: selectedContributor,
+        }}
+      />
     </div>
     </LoginGate>
   );

@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Session, Contributor } from '../types/dni';
+import type { Session, Contributor, Feedback } from '../types/dni';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -94,4 +94,23 @@ export async function updateSessionSummary(id: string, summary: string): Promise
     .single();
   if (error) throw error;
   return data;
+}
+
+export async function submitFeedback(feedback: Omit<Feedback, 'id' | 'created_at'>): Promise<Feedback> {
+  const { data, error } = await supabase
+    .from('dni_feedback')
+    .insert(feedback)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function getFeedback(): Promise<Feedback[]> {
+  const { data, error } = await supabase
+    .from('dni_feedback')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data ?? [];
 }

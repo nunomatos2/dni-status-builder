@@ -1,14 +1,15 @@
 interface TopBarProps {
-  view: 'home' | 'session' | 'editor' | 'summary';
+  view: 'home' | 'session' | 'editor' | 'summary' | 'feedback';
   onBack?: () => void;
   onNewSession?: () => void;
   onSave?: () => void;
   onGenerateSummary?: () => void;
+  onFeedback?: () => void;
   saveLabel?: string;
   summaryExists?: boolean;
 }
 
-export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateSummary, saveLabel, summaryExists }: TopBarProps) {
+export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateSummary, onFeedback, saveLabel, summaryExists }: TopBarProps) {
   return (
     <header className="fixed top-0 w-full h-14 z-50 bg-white/80 backdrop-blur-[20px] border-b-[3px] border-primary-container flex justify-between items-center px-4 md:px-6">
       <div className="flex items-center gap-4 md:gap-6 min-w-0">
@@ -37,6 +38,7 @@ export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateS
                 {view === 'session' && 'Sessões'}
                 {view === 'editor' && 'Guardar e voltar'}
                 {view === 'summary' && 'Voltar'}
+                {view === 'feedback' && 'Sessões'}
               </span>
             </button>
           </>
@@ -45,14 +47,27 @@ export default function TopBar({ view, onBack, onNewSession, onSave, onGenerateS
 
       {/* Right actions */}
       <div className="flex items-center gap-3">
-        {view === 'home' && onNewSession && (
-          <button
-            onClick={onNewSession}
-            className="bg-linear-to-r from-primary-container to-primary text-on-primary px-4 py-2 text-[11px] font-bold uppercase tracking-widest rounded-sm flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all"
-          >
-            <span className="material-symbols-outlined text-base">add</span>
-            <span className="hidden sm:inline">Nova Sessão</span>
-          </button>
+        {view === 'home' && (
+          <>
+            {onFeedback && (
+              <button
+                onClick={onFeedback}
+                className="text-secondary hover:text-on-surface px-3 py-2 text-[11px] font-bold uppercase tracking-widest rounded-sm flex items-center gap-2 transition-all"
+              >
+                <span className="material-symbols-outlined text-base">analytics</span>
+                <span className="hidden sm:inline">Feedback</span>
+              </button>
+            )}
+            {onNewSession && (
+              <button
+                onClick={onNewSession}
+                className="bg-linear-to-r from-primary-container to-primary text-on-primary px-4 py-2 text-[11px] font-bold uppercase tracking-widest rounded-sm flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all"
+              >
+                <span className="material-symbols-outlined text-base">add</span>
+                <span className="hidden sm:inline">Nova Sessão</span>
+              </button>
+            )}
+          </>
         )}
 
         {view === 'session' && onGenerateSummary && (
