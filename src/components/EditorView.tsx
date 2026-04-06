@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { upsertContributor, deleteContributor, getPreviousContribution } from '../lib/supabase';
 import { PILLARS } from '../types/dni';
 import type { Contributor } from '../types/dni';
+import RichEditor from './RichEditor';
 
 interface EditorViewProps {
   contributor: Contributor;
@@ -138,16 +139,13 @@ export default function EditorView({ contributor, readOnly, onRemoved, onUpdated
             </label>
             <span className="text-[10px] text-zinc-400 uppercase tracking-widest">campo principal</span>
           </div>
-          <div className="bg-surface-lowest" style={{ borderLeft: '4px solid #b5000b' }}>
-            <textarea
-              value={content}
-              onChange={e => handleContentChange(e.target.value)}
-              readOnly={readOnly}
-              rows={10}
-              placeholder="Descreva as principais vitórias do período..."
-              className={`w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed ${readOnly ? 'cursor-default' : ''}`}
-            />
-          </div>
+          <RichEditor
+            content={content}
+            onChange={handleContentChange}
+            placeholder="Descreva as principais vitórias do período..."
+            readOnly={readOnly}
+            borderColor="#b5000b"
+          />
           <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">
             Dica: foque-se em resultados tangíveis e métricas de impacto.
           </p>
@@ -161,17 +159,14 @@ export default function EditorView({ contributor, readOnly, onRemoved, onUpdated
             </label>
             <span className="text-[10px] text-zinc-400 uppercase tracking-widest">bloqueios & riscos</span>
           </div>
-          <div className="bg-surface-lowest" style={{ borderLeft: '3px solid #f59e0b' }}>
-            <textarea
-              value={concerns}
-              onChange={e => handleConcernsChange(e.target.value)}
-              readOnly={readOnly}
-              rows={4}
-              placeholder="O que está a impedir o progresso?"
-              className={`w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed ${readOnly ? 'cursor-default' : ''}`}
-            />
-          </div>
-          <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">opcional — uma por linha</p>
+          <RichEditor
+            content={concerns}
+            onChange={handleConcernsChange}
+            placeholder="O que está a impedir o progresso?"
+            readOnly={readOnly}
+            borderColor="#f59e0b"
+          />
+          <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">opcional</p>
         </section>
 
         {/* Approvals */}
@@ -182,17 +177,14 @@ export default function EditorView({ contributor, readOnly, onRemoved, onUpdated
             </label>
             <span className="text-[10px] text-zinc-400 uppercase tracking-widest">next steps</span>
           </div>
-          <div className="bg-surface-lowest" style={{ borderLeft: '3px solid #3b82f6' }}>
-            <textarea
-              value={approvals}
-              onChange={e => handleApprovalsChange(e.target.value)}
-              readOnly={readOnly}
-              rows={4}
-              placeholder="Que decisões precisam de ser tomadas pela direção?"
-              className={`w-full bg-transparent border-none p-6 text-sm resize-none focus:ring-0 focus:outline-none placeholder:text-zinc-300 leading-relaxed ${readOnly ? 'cursor-default' : ''}`}
-            />
-          </div>
-          <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">opcional — uma por linha</p>
+          <RichEditor
+            content={approvals}
+            onChange={handleApprovalsChange}
+            placeholder="Que decisões precisam de ser tomadas pela direção?"
+            readOnly={readOnly}
+            borderColor="#3b82f6"
+          />
+          <p className="mt-3 text-[11px] text-zinc-400 italic font-medium px-1">opcional</p>
         </section>
 
         {/* Footer */}
